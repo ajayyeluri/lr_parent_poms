@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+       <parent>
+              <artifactId>lr_parent_pom</artifactId>
+              <groupId>com.ibx.frontoffice.salesportal</groupId>
+              <version>1.0.0-SNAPSHOT</version>
+              <relativePath>../lr_parent_pom/pom.xml</relativePath>
+       </parent>
+
+       <modelVersion>4.0.0</modelVersion>
+
+       <artifactId>lr_theme_parent_pom</artifactId>
+       <packaging>pom</packaging>
+
+       <properties>
+              <liferay.theme.parent>_styled</liferay.theme.parent>
+              <liferay.theme.type>vm</liferay.theme.type>
+       </properties>
+
+       <dependencies>
+
+              <dependency>
+                     <groupId>commons-logging</groupId>
+                     <artifactId>commons-logging</artifactId>
+                     <version>1.2</version>
+              </dependency>
+              <dependency>
+                     <groupId>log4j</groupId>
+                     <artifactId>log4j</artifactId>
+                     <version>1.2.8</version>
+              </dependency>
+              <dependency>
+                     <groupId>javax.portlet</groupId>
+                     <artifactId>portlet-api</artifactId>
+                     <version>2.0</version>
+                     <scope>provided</scope>
+              </dependency>
+              <dependency>
+                     <groupId>javax.servlet</groupId>
+                     <artifactId>servlet-api</artifactId>
+                     <version>2.4</version>
+                     <scope>provided</scope>
+              </dependency>
+              <dependency>
+                     <groupId>javax.servlet.jsp</groupId>
+                     <artifactId>jsp-api</artifactId>
+                     <version>2.0</version>
+                     <scope>provided</scope>
+              </dependency>
+              <dependency>
+                     <groupId>javax.servlet</groupId>
+                     <artifactId>jstl</artifactId>
+                     <version>1.2</version>
+              </dependency>
+
+       </dependencies>
+
+
+       <build>
+
+
+              <plugins>
+
+                     <plugin>
+                           <groupId>com.liferay.maven.plugins</groupId>
+                           <artifactId>liferay-maven-plugin</artifactId>
+                           <version>${liferay.maven.plugin.version}</version>
+                           <executions>
+                                  <execution>
+                                         <id>generate-sources</id>
+                                         <phase>generate-sources</phase>
+                                         <goals>
+                                                <goal>theme-merge</goal>
+                                         </goals>
+                                  </execution>
+                                  <execution>
+                                         <id>prepare-themes</id>
+                                         <phase>process-sources</phase>
+                                         <goals>
+                                                <goal>build-css</goal>
+                                                <goal>build-thumbnail</goal>
+                                         </goals>
+                                  </execution>
+                           </executions>
+                           <configuration>
+                                  <autoDeployDir>${liferay.auto.deploy.dir}</autoDeployDir>
+                                  <liferayVersion>${liferay.version}</liferayVersion>
+                                  <parentTheme>${liferay.theme.parent}</parentTheme>
+                                  <pluginType>theme</pluginType>
+                                  <themeType>${liferay.theme.type}</themeType>
+                           </configuration>
+                     </plugin>
+
+
+                     <plugin>
+                           <artifactId>maven-resources-plugin</artifactId>
+                           <version>2.5</version>
+                           <configuration>
+                                  <encoding>UTF-8</encoding>
+                           </configuration>
+                     </plugin>
+                     <plugin>
+                           <groupId>org.apache.maven.plugins</groupId>
+                           <artifactId>maven-war-plugin</artifactId>
+                           <configuration>
+                                  <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
+                                  <warSourceDirectory>src/main/webapp</warSourceDirectory>
+                           </configuration>
+                           <executions>
+                                  <execution>
+                                         <id>prepare-webapp</id>
+                                         <phase>generate-sources</phase>
+                                         <configuration>
+                                                <tasks>
+                                                       <copy todir="${project.build.directory}/${project.build.finalName}">
+                                                              <fileset dir="src/main/webapp" />
+                                                       </copy>
+                                                </tasks>
+                                         </configuration>
+                                  </execution>
+                           </executions>
+                     </plugin>
+              </plugins>
+
+       </build>
+</project>
